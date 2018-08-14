@@ -69,6 +69,19 @@ describe('HTTP', function() {
     assert.strictEqual(info.chain.height, 0);
   });
 
+  it('should get uptime', async () => {
+    const MockDate = require('mockdate');
+    const mockedNow = 1225476600;
+    MockDate.set(mockedNow * 1000);
+
+    node.startTime = (mockedNow - 100) * 1000;
+    const uptime = await nclient.getUptime();
+    assert.strictEqual(uptime.uptime, '100');
+
+    MockDate.reset();
+    node.startTime = -1;
+  });
+
   it('should get wallet info', async () => {
     const info = await wallet.getInfo();
     assert.strictEqual(info.id, 'test');
